@@ -35,6 +35,13 @@
             text-shadow: 0 0 10px rgba(88, 166, 255, 0.2);
         }
         
+        .author {
+            color: #8b949e;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
         .subtitle {
             color: #8b949e;
             font-size: 1.2rem;
@@ -165,8 +172,8 @@
 <body>
     <header>
         <h1>Google Bug Hunt Dorks Cheatsheet</h1>
+        <div class="author">Author: Aryan Giri</div>
         <p class="subtitle">A curated collection of Google Dorks for reconnaissance and vulnerability discovery in bug bounty programs.</p>
-        <p class="subtitle">Author : Aryan Giri</p>
     </header>
     
     <div class="warning">
@@ -175,6 +182,60 @@
     </div>
     
     <div class="container">
+        <!-- SQL Injection Hunting -->
+        <div class="category">
+            <h2><span class="icon">🗃️</span> SQL Injection Hunting</h2>
+            <ul class="dork-list">
+                <li class="dork-item">
+                    inurl:".php?id="
+                    <div class="purpose">Find pages with ID parameters (common SQLi target)</div>
+                </li>
+                <li class="dork-item">
+                    inurl:"product.php?id="
+                    <div class="purpose">E-commerce product pages vulnerable to SQLi</div>
+                </li>
+                <li class="dork-item">
+                    inurl:"category.php?id="
+                    <div class="purpose">Category pages with dynamic parameters</div>
+                </li>
+                <li class="dork-item">
+                    inurl:"news.php?id=" OR inurl:"article.php?id="
+                    <div class="purpose">News/article sites with SQLi potential</div>
+                </li>
+                <li class="dork-item">
+                    inurl:"index.php?id=" intext:"View Details"
+                    <div class="purpose">Detail view pages with ID parameters</div>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- XSS Vulnerability Hunting -->
+        <div class="category">
+            <h2><span class="icon">🎯</span> XSS Vulnerability Hunting</h2>
+            <ul class="dork-list">
+                <li class="dork-item">
+                    inurl:"search.php?q="
+                    <div class="purpose">Search pages that may reflect user input</div>
+                </li>
+                <li class="dork-item">
+                    inurl:"contact.php?subject=" OR inurl:"feedback.php?msg="
+                    <div class="purpose">Contact/feedback forms with XSS potential</div>
+                </li>
+                <li class="dork-item">
+                    inurl:".php?name=" OR inurl:".php?message="
+                    <div class="purpose">Pages with name/message parameters</div>
+                </li>
+                <li class="dork-item">
+                    inurl:"error.php?msg=" OR inurl:"errormsg="
+                    <div class="purpose">Error pages that reflect parameter values</div>
+                </li>
+                <li class="dork-item">
+                    inurl:"redirect.php?url="
+                    <div class="purpose">Redirect pages vulnerable to XSS</div>
+                </li>
+            </ul>
+        </div>
+        
         <!-- Login Portals & Admin Interfaces -->
         <div class="category">
             <h2><span class="icon">🔐</span> Login Portals & Admin Interfaces</h2>
@@ -266,7 +327,9 @@
                 </li>
             </ul>
         </div>
-        
+    </div>
+    
+    <div class="container">
         <!-- Reconnaissance & Discovery -->
         <div class="category">
             <h2><span class="icon">🗺️</span> Reconnaissance & Discovery</h2>
@@ -290,9 +353,32 @@
             </ul>
         </div>
         
+        <!-- Advanced Parameter Discovery -->
+        <div class="category">
+            <h2><span class="icon">⚡</span> Advanced Parameter Discovery</h2>
+            <ul class="dork-list">
+                <li class="dork-item">
+                    site:target.com inurl:".php?" "id=" "&"
+                    <div class="purpose">Find pages with multiple parameters</div>
+                </li>
+                <li class="dork-item">
+                    inurl:".php?" "id=" "cat=" "product="
+                    <div class="purpose">E-commerce sites with multiple params</div>
+                </li>
+                <li class="dork-item">
+                    site:*.example.com inurl:"?id=" -inurl:"wp-"
+                    <div class="purpose">Find ID params excluding WordPress</div>
+                </li>
+                <li class="dork-item">
+                    allinurl:"id=" "php?" "view="
+                    <div class="purpose">View pages with ID parameters</div>
+                </li>
+            </ul>
+        </div>
+        
         <!-- Advanced Hunting -->
         <div class="category">
-            <h2><span class="icon">⚡</span> Advanced Hunting</h2>
+            <h2><span class="icon">🔬</span> Advanced Hunting</h2>
             <ul class="dork-list">
                 <li class="dork-item">
                     intext:"Warning: mysql_connect()" intext:"on line" filetype:php
@@ -312,16 +398,49 @@
                 </li>
             </ul>
         </div>
+        
+        <!-- Bug Bounty Targeted Dorks -->
+        <div class="category">
+            <h2><span class="icon">🎯</span> Bug Bounty Targeted Dorks</h2>
+            <ul class="dork-list">
+                <li class="dork-item">
+                    site:*.example.com inurl:"?id="
+                    <div class="purpose">Target all subdomains with ID params</div>
+                </li>
+                <li class="dork-item">
+                    site:example.com filetype:php inurl:"?id="
+                    <div class="purpose">PHP files with ID parameters on target</div>
+                </li>
+                <li class="dork-item">
+                    site:*.example.com inurl:"search" "q="
+                    <div class="purpose">Search functionality across subdomains</div>
+                </li>
+                <li class="dork-item">
+                    site:example.com inurl:".php?" -site:blog.example.com
+                    <div class="purpose">Exclude specific subdomains from search</div>
+                </li>
+            </ul>
+        </div>
     </div>
     
     <div class="warning">
-        <h3><span class="icon">💡</span> PRO TIPS FOR EFFECTIVE DORKING</h3>
+        <h3><span class="icon">💡</span> SQLi/XSS HUNTING METHODOLOGY</h3>
         <p>
-            <strong>Combine Operators:</strong> Chain operators together to refine results. Example: <code>site:example.com intext:"API_KEY" -inurl:github</code>.<br>
-            <strong>Exclude Clutter:</strong> Use the minus sign (<code>-</code>) to filter out unwanted results. Example: <code>inurl:login -inurl:assets</code>.<br>
-            <strong>Search Exact Phrases:</strong> Use quotes (<code>" "</code>) to find specific strings like <code>"DB_PASSWORD="</code>.<br>
-            <strong>Target Specific Sites:</strong> Use <code>site:</code> to focus on platforms like <code>site:pastebin.com</code> or <code>site:github.com</code> where secrets are sometimes leaked.<br>
-            <strong>Leverage the GHDB:</strong> For inspiration and a massive collection of tested dorks, refer to the <strong>Exploit Database's Google Hacking Database (GHDB)</strong>.
+            <strong>Step 1 - Discovery:</strong> Use dorks like <code>site:target.com inurl:".php?id="</code> to find potential targets.<br>
+            <strong>Step 2 - Testing (Authorized Only!):</strong> For SQLi, test with <code>id=1'</code> and look for errors. For XSS, test with <code>q=&lt;script&gt;alert(1)&lt;/script&gt;</code>.<br>
+            <strong>Step 3 - Manual Verification:</strong> Never use automated scanners on unauthorized targets. Test manually with harmless payloads.<br>
+            <strong>Step 4 - Responsible Disclosure:</strong> If you find a vulnerability (and have authorization), report it through proper channels.
+        </p>
+    </div>
+    
+    <div class="warning">
+        <h3><span class="icon">🚨</span> CRITICAL ETHICAL NOTES FOR SQLi/XSS HUNTING</h3>
+        <p>
+            <strong>⚠️ TEST ONLY AUTHORIZED TARGETS:</strong> Only test sites you own or have explicit permission to test (bug bounty programs).<br>
+            <strong>⚠️ USE HARMLESS PAYLOADS:</strong> For SQLi, use <code>'</code> (single quote) not <code>DROP TABLE</code>. For XSS, use <code>alert(1)</code> not malicious scripts.<br>
+            <strong>⚠️ NEVER ACCESS DATA:</strong> Even if you find SQL injection, never access, download, or modify database contents.<br>
+            <strong>⚠️ CHECK PROGRAM RULES:</strong> Each bug bounty program has specific rules - read them before testing!<br>
+            <strong>⚠️ YOU ARE RESPONSIBLE:</strong> You bear full legal responsibility for how you use these techniques.
         </p>
     </div>
     
