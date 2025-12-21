@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Bug Hunt Dorks Cheatsheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 1px solid #30363d;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #58a6ff;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(88, 166, 255, 0.2);
+        }
+        
+        .subtitle {
+            color: #8b949e;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .warning {
+            background-color: rgba(248, 81, 73, 0.1);
+            border-left: 4px solid #f85149;
+            padding: 15px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning h3 {
+            color: #f85149;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .category {
+            background-color: #161b22;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #30363d;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .category:hover {
+            transform: translateY(-5px);
+            border-color: #58a6ff;
+        }
+        
+        h2 {
+            color: #58a6ff;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .dork-list {
+            list-style-type: none;
+        }
+        
+        .dork-item {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #c9d1d9;
+            position: relative;
+            transition: all 0.2s;
+            word-break: break-all;
+        }
+        
+        .dork-item:hover {
+            background-color: #1c2128;
+            border-color: #58a6ff;
+            cursor: pointer;
+        }
+        
+        .dork-item:active {
+            background-color: #0d419d;
+        }
+        
+        .purpose {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .copy-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #238636;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            border-top: 1px solid #30363d;
+            margin-top: 30px;
+            color: #8b949e;
+            font-size: 0.9rem;
+        }
+        
+        .icon {
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Google Bug Hunt Dorks Cheatsheet</h1>
+        <p class="subtitle">A curated collection of Google Dorks for reconnaissance and vulnerability discovery in bug bounty programs.</p>
+    </header>
+    
+    <div class="warning">
+        <h3><span class="icon">⚠️</span> ETHICAL & LEGAL USE ONLY</h3>
+        <p>This cheatsheet is intended for <strong>authorized security testing only</strong>. Always obtain explicit permission before testing any target. Never attempt to access, download, or modify data without authorization. Use these techniques responsibly and in compliance with all applicable laws and terms of service.</p>
+    </div>
+    
+    <div class="container">
+        <!-- Login Portals & Admin Interfaces -->
+        <div class="category">
+            <h2><span class="icon">🔐</span> Login Portals & Admin Interfaces</h2>
+            <ul class="dork-list">
+                <li class="dork-item">
+                    site:example.com inurl:admin
+                    <div class="purpose">Find admin panels</div>
+                </li>
+                <li class="dork-item">
+                    site:example.com inurl:login
+                    <div class="purpose">Discover login pages</div>
+                </li>
+                <li class="dork-item">
+                    site:*.example.com inurl:login ext:jsp
+                    <div class="purpose">Target specific login files</div>
+                </li>
+                <li class="dork-item">
+                    intitle:"Login — WordPress"
+                    <div class="purpose">Find WordPress login pages</div>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Sensitive Files & Data -->
+        <div class="category">
+            <h2><span class="icon">📁</span> Sensitive Files & Data</h2>
+            <ul class="dork-list">
+                <li class="dork-item">
+                    site:example.com filetype:env
+                    <div class="purpose">Find environment/config files</div>
+                </li>
+                <li class="dork-item">
+                    site:example.com ext:sql
+                    <div class="purpose">Discover database dumps</div>
+                </li>
+                <li class="dork-item">
+                    site:example.com ext:bak | ext:old | ext:backup
+                    <div class="purpose">Find backup/old files</div>
+                </li>
+                <li class="dork-item">
+                    filetype:sql inurl:wp-content/backup-*
+                    <div class="purpose">WordPress database backups</div>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- WordPress Specific -->
+        <div class="category">
+            <h2><span class="icon">🖥️</span> WordPress Specific</h2>
+            <ul class="dork-list">
+                <li class="dork-item">
+                    inurl:"/wp-json/wp/v2/users"
+                    <div class="purpose">Expose WordPress user data</div>
+                </li>
+                <li class="dork-item">
+                    intitle:"index of" inurl:wp-content
+                    <div class="purpose">Find exposed wp-content directories</div>
+                </li>
+                <li class="dork-item">
+                    inurl:/wp-content/plugins/wp-dbmanager/
+                    <div class="purpose">Discover vulnerable plugin directories</div>
+                </li>
+                <li class="dork-item">
+                    site:*.example.com ext:php inurl:"wp-"
+                    <div class="purpose">Find WordPress tech stacks</div>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- API & Configuration Files -->
+        <div class="category">
+            <h2><span class="icon">🔧</span> API & Configuration Files</h2>
+            <ul class="dork-list">
+                <li class="dork-item">
+                    intitle:"index.of" intext:"api.txt"
+                    <div class="purpose">Find API documentation/files</div>
+                </li>
+                <li class="dork-item">
+                    site:*.example.com filetype:env intext:password
+                    <div class="purpose">Hunt for exposed credentials in env files</div>
+                </li>
+                <li class="dork-item">
+                    ext:env | ext:yaml | ext:json "DB_PASSWORD"
+                    <div class="purpose">Search for database passwords</div>
+                </li>
+                <li class="dork-item">
+                    "API_KEY" OR "API_SECRET" site:example.com
+                    <div class="purpose">Discover exposed API keys</div>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Reconnaissance & Discovery -->
+        <div class="category">
+            <h2><span class="icon">🗺️</span> Reconnaissance & Discovery</h2>
+            <ul class="dork-list">
+                <li class="dork-item">
+                    site:*.example.com
+                    <div class="purpose">Discover subdomains</div>
+                </li>
+                <li class="dork-item">
+                    intitle:"index of" site:example.com
+                    <div class="purpose">Find open directory listings</div>
+                </li>
+                <li class="dork-item">
+                    inurl:".git" site:example.com
+                    <div class="purpose">Locate exposed Git repositories</div>
+                </li>
+                <li class="dork-item">
+                    intext:"Welcome to phpMyAdmin"
+                    <div class="purpose">Find phpMyAdmin installations</div>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Advanced Hunting -->
+        <div class="category">
+            <h2><span class="icon">⚡</span> Advanced Hunting</h2>
+            <ul class="dork-list">
+                <li class="dork-item">
+                    intext:"Warning: mysql_connect()" intext:"on line" filetype:php
+                    <div class="purpose">Find PHP error messages with DB info</div>
+                </li>
+                <li class="dork-item">
+                    allintext:username filetype:log
+                    <div class="purpose">Search log files for usernames</div>
+                </li>
+                <li class="dork-item">
+                    filetype:log inurl:"access.log"
+                    <div class="purpose">Discover server access logs</div>
+                </li>
+                <li class="dork-item">
+                    site:example.com (ext:pdf | ext:doc | ext:xls)
+                    <div class="purpose">Find exposed documents</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="warning">
+        <h3><span class="icon">💡</span> PRO TIPS FOR EFFECTIVE DORKING</h3>
+        <p>
+            <strong>Combine Operators:</strong> Chain operators together to refine results. Example: <code>site:example.com intext:"API_KEY" -inurl:github</code>.<br>
+            <strong>Exclude Clutter:</strong> Use the minus sign (<code>-</code>) to filter out unwanted results. Example: <code>inurl:login -inurl:assets</code>.<br>
+            <strong>Search Exact Phrases:</strong> Use quotes (<code>" "</code>) to find specific strings like <code>"DB_PASSWORD="</code>.<br>
+            <strong>Target Specific Sites:</strong> Use <code>site:</code> to focus on platforms like <code>site:pastebin.com</code> or <code>site:github.com</code> where secrets are sometimes leaked.<br>
+            <strong>Leverage the GHDB:</strong> For inspiration and a massive collection of tested dorks, refer to the <strong>Exploit Database's Google Hacking Database (GHDB)</strong>.
+        </p>
+    </div>
+    
+    <div id="copyNotification" class="copy-notification">Dork copied to clipboard!</div>
+    
+    <footer>
+        <p>Google Bug Hunt Dorks Cheatsheet | Created for authorized security research and bug bounty hunting</p>
+        <p>Remember: Always test ethically and with proper authorization</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dorkItems = document.querySelectorAll('.dork-item');
+            const copyNotification = document.getElementById('copyNotification');
+            
+            dorkItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const dorkText = this.childNodes[0].textContent.trim();
+                    
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(dorkText).then(() => {
+                        // Show notification
+                        copyNotification.style.display = 'block';
+                        setTimeout(() => {
+                            copyNotification.style.display = 'none';
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        // Fallback for older browsers
+                        const textArea = document.createElement('textarea');
+                        textArea.value = dorkText;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        
+                        // Show notification
+                        copyNotification.style.display = 'block';
+                        setTimeout(() => {
+                            copyNotification.style.display = 'none';
+                        }, 2000);
+                    });
+                });
+            });
+            
+            // Add visual feedback when clicking
+            dorkItems.forEach(item => {
+                item.addEventListener('mousedown', function() {
+                    this.style.backgroundColor = '#0d419d';
+                });
+                item.addEventListener('mouseup', function() {
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
